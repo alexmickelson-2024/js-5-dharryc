@@ -23,7 +23,8 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 1em;
-
+  border: solid .1em black;
+  border-radius: .5em;
   background-color: #e8f4fa;
 }
 

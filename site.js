@@ -1,18 +1,23 @@
 import { products } from "./products.js"
 
+
+function dragstart(ev) {
+    console.log(ev)
+    console.log(ev.target.id)
+}
 //setup card making function
 
 const cardArticleElement = document.getElementById("products-container")
 const productList = products.map(a => a);
-console.log(productList)
 const availibleProducts = document.createElement("h2")
 availibleProducts.textContent = "Availible Products"
 
 function MakeCards(product) {
-    const container = document.createElement("div")
-    container.classList.add("card")
-    container.id = product.title
-    container.setAttribute("draggable", true)
+    const cardContainerNode = document.createElement("div")
+    cardContainerNode.classList.add("card")
+    cardContainerNode.id = product.title
+    cardContainerNode.setAttribute("draggable", true)
+    cardContainerNode.setAttribute("ondragstart", 'dragstart(event)')
     const imgContainer = document.createElement("div")
     imgContainer.classList.add("card-img")
     imgContainer.style.backgroundImage= `url('${product.image}')`
@@ -31,26 +36,13 @@ function MakeCards(product) {
     quantityNode.classList.add("card-quantity")
     quantityNode.textContent = product.quantity
     cardContent.append(titleNode, descriptionNode, priceNode, quantityNode)    
-    container.append(imgContainer, cardContent)
-    container.addEventListener("dragstart", (event) => {
-        // event.preventDefault()
-        console.log(product.title)
-    })
-    container.addEventListener("drag", (event) => {
-        event.preventDefault()
-        console.log(product.description)
-    })
-    return container
+    cardContainerNode.append(imgContainer, cardContent)
+    return cardContainerNode
 }
 
 
 
-
-
 //calling functions
-
-
-
 
 cardArticleElement.replaceChildren();
 cardArticleElement.appendChild(availibleProducts)
