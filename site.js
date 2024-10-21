@@ -17,10 +17,13 @@ function MakeCards(product) {
     cardContainerNode.classList.add("card")
     cardContainerNode.id = product.title
     cardContainerNode.setAttribute("draggable", true)
-    cardContainerNode.setAttribute("ondragstart", 'dragstart(event)')
+    cardContainerNode.addEventListener("dragstart", (ev) => {
+        console.log(document.getElementById(ev.target.id))
+        ev.dataTransfer.setData("id", ev.target.id)
+    })
     const imgContainer = document.createElement("div")
     imgContainer.classList.add("card-img")
-    imgContainer.style.backgroundImage= `url('${product.image}')`
+    imgContainer.style.backgroundImage = `url('${product.image}')`
     const cardContent = document.createElement("div")
     cardContent.classList.add("card-content")
     const titleNode = document.createElement("div")
@@ -35,15 +38,26 @@ function MakeCards(product) {
     const quantityNode = document.createElement("div")
     quantityNode.classList.add("card-quantity")
     quantityNode.textContent = product.quantity
-    cardContent.append(titleNode, descriptionNode, priceNode, quantityNode)    
+    cardContent.append(titleNode, descriptionNode, priceNode, quantityNode)
     cardContainerNode.append(imgContainer, cardContent)
     return cardContainerNode
 }
 
 
+const cartNode = document.getElementById("cartList")
+cartNode.addEventListener("dragover", (ev) => {
+    ev.preventDefault()
+})
+cartNode.addEventListener("drop", (ev) => {
+    ev.preventDefault()
+    const myProduct = productList.find((product) => product.title === ev.dataTransfer.getData("id"))
+    const itemCopy = MakeCards(myProduct)
+    console.log(itemCopy)
+    cartNode.appendChild(itemCopy)
+})
 
 //calling functions
 
 cardArticleElement.replaceChildren();
 cardArticleElement.appendChild(availibleProducts)
-productList.forEach((item) => {cardArticleElement.appendChild(MakeCards(item))})
+productList.forEach((item) => { cardArticleElement.appendChild(MakeCards(item)) })
