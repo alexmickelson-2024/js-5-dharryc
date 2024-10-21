@@ -1,11 +1,26 @@
 import { products } from "./products.js"
 
 
-function dragstart(ev) {
-    console.log(ev)
-    console.log(ev.target.id)
-}
 //setup card making function
+const productsNode = document.getElementById("products-container")
+productsNode.addEventListener("drop", (ev) =>{
+    ev.preventDefault()
+    document.getElementById(ev.dataTransfer.getData("id")).parentElement.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
+})
+const total = document.getElementById("amount")
+const cartNode = document.getElementById("cartList")
+cartNode.addEventListener("dragover", (ev) => {
+    ev.preventDefault()
+})
+cartNode.addEventListener("drop", (ev) => {
+    ev.preventDefault()
+    const myProduct = productList.find((product) => product.title === ev.dataTransfer.getData("id"))
+    const itemCopy = MakeCards(myProduct)
+    itemCopy.id = `${myProduct.title}-copy`
+    if (document.getElementById(`${myProduct.title}-copy`) == null) {
+        cartNode.appendChild(itemCopy)
+    }
+})
 
 const cardArticleElement = document.getElementById("products-container")
 const productList = products.map(a => a);
@@ -18,8 +33,10 @@ function MakeCards(product) {
     cardContainerNode.id = product.title
     cardContainerNode.setAttribute("draggable", true)
     cardContainerNode.addEventListener("dragstart", (ev) => {
-        console.log(document.getElementById(ev.target.id))
         ev.dataTransfer.setData("id", ev.target.id)
+    })
+    cardContainerNode.addEventListener("dragover", (ev) => {
+        ev.preventDefault()
     })
     const imgContainer = document.createElement("div")
     imgContainer.classList.add("card-img")
@@ -34,7 +51,7 @@ function MakeCards(product) {
     descriptionNode.textContent = product.description
     const priceNode = document.createElement("div")
     priceNode.classList.add("card-price")
-    priceNode.textContent = product.price
+    priceNode.classList.add("price")
     const quantityNode = document.createElement("div")
     quantityNode.classList.add("card-quantity")
     quantityNode.textContent = product.quantity
@@ -44,17 +61,6 @@ function MakeCards(product) {
 }
 
 
-const cartNode = document.getElementById("cartList")
-cartNode.addEventListener("dragover", (ev) => {
-    ev.preventDefault()
-})
-cartNode.addEventListener("drop", (ev) => {
-    ev.preventDefault()
-    const myProduct = productList.find((product) => product.title === ev.dataTransfer.getData("id"))
-    const itemCopy = MakeCards(myProduct)
-    console.log(itemCopy)
-    cartNode.appendChild(itemCopy)
-})
 
 //calling functions
 
