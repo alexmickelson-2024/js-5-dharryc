@@ -1,12 +1,15 @@
 import { products } from "./products.js"
 
-
 //setup card making function
+document.getElementById("amount").textContent = "0.00"
 const productsNode = document.getElementById("products-container")
-productsNode.addEventListener("drop", (ev) =>{
+productsNode.addEventListener("drop", (ev) => {
     ev.preventDefault()
     console.log(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
-    document.getElementById(ev.dataTransfer.getData("id")).parentElement.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
+    if (document.getElementById(ev.dataTransfer.getData("id")).parentElement.id === "cartList") {
+        document.getElementById("amount").textContent = Number(document.getElementById("amount").textContent) - Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
+        document.getElementById(ev.dataTransfer.getData("id")).parentElement.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
+    }
 })
 const total = document.getElementById("amount")
 const cartNode = document.getElementById("cartList")
@@ -15,6 +18,7 @@ cartNode.addEventListener("dragover", (ev) => {
 })
 cartNode.addEventListener("drop", (ev) => {
     ev.preventDefault()
+    document.getElementById("amount").textContent = Number(document.getElementById("amount").textContent) + Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
     const myProduct = productList.find((product) => product.title === ev.dataTransfer.getData("id"))
     const itemCopy = MakeCards(myProduct)
     itemCopy.id = `${myProduct.title}-copy`
