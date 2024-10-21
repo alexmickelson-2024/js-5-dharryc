@@ -5,6 +5,7 @@ import { products } from "./products.js"
 const productsNode = document.getElementById("products-container")
 productsNode.addEventListener("drop", (ev) =>{
     ev.preventDefault()
+    console.log(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
     document.getElementById(ev.dataTransfer.getData("id")).parentElement.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
 })
 const total = document.getElementById("amount")
@@ -51,7 +52,7 @@ function MakeCards(product) {
     descriptionNode.textContent = product.description
     const priceNode = document.createElement("div")
     priceNode.classList.add("card-price")
-    priceNode.classList.add("price")
+    priceNode.textContent = product.price
     const quantityNode = document.createElement("div")
     quantityNode.classList.add("card-quantity")
     quantityNode.textContent = product.quantity
