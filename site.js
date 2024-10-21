@@ -25,6 +25,9 @@ cartNode.addEventListener("drop", (ev) => {
     if (document.getElementById(`${myProduct.title}-copy`) == null) {
         cartNode.appendChild(itemCopy)
     }
+    document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent = Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent) - 1
+    if(Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent) === 0)
+        document.getElementById(ev.dataTransfer.getData("id")).parentNode.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
 })
 
 const cardArticleElement = document.getElementById("products-container")
