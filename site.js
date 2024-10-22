@@ -1,33 +1,36 @@
 import { products } from "./products.js"
 
 //setup card making function
-document.getElementById("amount").textContent = "0.00"
+const totalPriceNode = document.getElementById("amount")
+totalPriceNode.textContent = "0.00"
 const productsNode = document.getElementById("products-container")
 productsNode.addEventListener("drop", (ev) => {
     ev.preventDefault()
-    console.log(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
-    if (document.getElementById(ev.dataTransfer.getData("id")).parentElement.id === "cartList") {
-        document.getElementById("amount").textContent = Number(document.getElementById("amount").textContent) - Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
-        document.getElementById(ev.dataTransfer.getData("id")).parentElement.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
+    const cartListNode = document.getElementById(ev.dataTransfer.getData("id")).parentElement
+    const currentProductNode = document.getElementById(ev.dataTransfer.getData("id"))
+    console.log(ev.dataTransfer.getData("id"))
+    if (cartListNode.id === "cartList") {
+        totalPriceNode.textContent = Number(totalPriceNode.textContent) - Number(currentProductNode.childNodes[1].childNodes[2].textContent)
+        cartListNode.removeChild(currentProductNode)
     }
 })
-const total = document.getElementById("amount")
 const cartNode = document.getElementById("cartList")
 cartNode.addEventListener("dragover", (ev) => {
     ev.preventDefault()
 })
 cartNode.addEventListener("drop", (ev) => {
     ev.preventDefault()
-    document.getElementById("amount").textContent = Number(document.getElementById("amount").textContent) + Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[2].textContent)
+    const itemNode = document.getElementById(ev.dataTransfer.getData("id"))
+    totalPriceNode.textContent = Number(totalPriceNode.textContent) + Number(itemNode.childNodes[1].childNodes[2].textContent)
     const myProduct = productList.find((product) => product.title === ev.dataTransfer.getData("id"))
     const itemCopy = MakeCards(myProduct)
     itemCopy.id = `${myProduct.title}-copy`
     if (document.getElementById(`${myProduct.title}-copy`) == null) {
         cartNode.appendChild(itemCopy)
     }
-    document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent = Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent) - 1
-    if(Number(document.getElementById(ev.dataTransfer.getData("id")).childNodes[1].childNodes[3].textContent) === 0)
-        document.getElementById(ev.dataTransfer.getData("id")).parentNode.removeChild(document.getElementById(ev.dataTransfer.getData("id")))
+    itemNode.childNodes[1].childNodes[3].textContent = Number(itemNode.childNodes[1].childNodes[3].textContent) - 1
+    if (Number(itemNode.childNodes[1].childNodes[3].textContent) === 0)
+        itemNode.parentNode.removeChild(itemNode)
 })
 
 const cardArticleElement = document.getElementById("products-container")
